@@ -1,0 +1,66 @@
+
+<div class="clearfix">
+
+  <form class="form-horizontal search-form-middle" enctype="multipart/form-data"
+        charset="utf-8"
+        action="/search" method="get" style="display: inline-block">
+    <div class="input-group" >
+      <input id="inputSearch" type="text" class="form-control" value="<%= content %>" name="content"
+             placeholder="搜索 <%= threadsN %> 条工程师回复">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-default" id="openBtn">搜索</button>
+        </span>
+    </div>
+  </form>
+
+  <a type="submit" class="btn btn-default pull-right" href="/google?content=<%= content %>" target="_blank">Google</a>
+</div>
+
+
+<div class="clearfix">
+  <div style="width: 50%;float: left">
+    <table class="table table-borderless table-sortable" >
+      <thead>
+      <tr>
+        <th data-sort="string">工单</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% tickets.forEach (function (ticket){ %>
+      <tr>
+        <td class="table-title"><a href="/tickets/<%= ticket.id %>/threads"
+                                   title="<%= ticket.content %>"><%= ticket.title %></a>
+        </td>
+      </tr>
+      <% } ) %>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div style="margin-left: 50%">
+    <table class="table table-borderless table-sortable" >
+      <thead>
+      <tr>
+        <th data-sort="string">文档</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% docs.forEach (function (doc){ %>
+      <tr>
+        <td>
+          <a href="<%= doc.url %>"><%= doc.title %></a>
+        </td>
+      </tr>
+      <% } ) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="search-page">
+  <ul class="pagination">
+    <li> <a class="" href="/search?content=<%=content%>&page=<%=prevPage%>">上一页</a></li>
+    <li><a class="" href="/search?content=<%=content%>&page=<%=nextPage%>">下一页</a></li>
+  </ul>
+</div>

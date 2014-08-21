@@ -1,0 +1,16 @@
+<div>
+  <p >
+    <%- info %>
+  </p>
+
+  <p class="info-back-btn">
+    <a href="<% if(backLink){ %>
+       <%= backLink %>
+      <% }else{ %>
+      javascript:history.back()
+      <% } %>
+      " class="btn btn-default">返回</a>
+  </p>
+</div>
+
+

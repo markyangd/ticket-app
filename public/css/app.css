@@ -1,0 +1,237 @@
+/* Limit title col width for tables, this avoid super-long non-breaking characters */
+.table-title {
+  width: 60%;
+}
+
+/* Limit date col width for tables */
+.table-status,
+.table-type,
+.table-date {
+  width: 10%;
+}
+
+.table-id {
+  width: 4%;
+  color: #999;
+}
+
+/* Sortable tables powered by Stupid Table */
+.table-sortable thead th[data-sort] {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.table-sortable thead th[data-sort]:hover,
+.table-sortable thead th[data-sort]:focus {
+  color: #3090e4;
+}
+
+.table-sortable thead th[data-sort].sorting-asc,
+.table-sortable thead th[data-sort].sorting-desc {
+  color: #000;
+}
+
+.table-sortable thead th[data-sort] .arrow {
+  margin-left: 10px;
+  font-size: 10px;
+  vertical-align: 2px;
+}
+
+/* Search form for admins */
+.search-form {
+  width: 300px;
+  margin-top: 4px;
+}
+
+.search-form-middle {
+  position: relative;
+  width: 40%;
+  left: 30%;
+  right: 30%;
+}
+
+@media (max-width: 600px) {
+
+  .search-form-middle {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+}
+
+/* Navbar Brand */
+.navbar-brand-subtitle {
+  font-size: 12px;
+  padding: 2px 6px;
+  border: 1px solid;
+  border-radius: 4px;
+  vertical-align: 4px;
+}
+
+/* Thread wrap */
+.ticket-thread-wrap {
+  margin-bottom: 30px;
+}
+
+/* Thread date */
+.ticket-date {
+  color: #aaa;
+}
+
+/* Thread content */
+pre img {
+  max-width: 400px;
+}
+
+@media (max-width: 400px) {
+
+  pre img {
+    max-width: 100%;
+  }
+}
+
+/* Footer */
+.footer {
+  color: #999;
+}
+
+.icon-lock {
+  color: #ffcb39;
+  font-size: 16px;
+  vertical-align: -2px;
+}
+
+.btn-submit {
+  width: 90px;
+  margin-right: 60px;
+}
+
+.btn-back {
+  width: 90px;
+}
+
+.admin-detail-email,
+.admin-detail-name,
+.admin-detail-module,
+.admin-detail-username,
+.admin-detail-basic{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.admin-detail-email{
+  border-color:#ffa51e;
+  color: #FFA51E
+}
+
+.admin-detail-username{
+}
+
+.qq-image{
+  display: inline-block;
+  overflow: hidden;
+  background-image: url("../images/counseling_style_51.png");
+  width: 20px;
+  height: 20px;
+}
+
+.qq-number{
+  margin-left: 10px;
+  margin-top: -5px;
+}
+
+.edit-contact{
+  /*margin-right: 30px;*/
+}
+
+.qq-contact{
+  margin-left: 10px;
+}
+
+.contact-email{
+  margin-left: 20px;
+}
+
+.qq-input{
+
+}
+
+.ticket-contact-form {
+}
+  .ticket-contact-form h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  .ticket-contact-form hr {
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+  .ticket-contact-form .form-group label {
+    font-weight: bold;
+  }
+
+.contact-save-btn {
+/*  margin-left: 10px;*/
+}
+
+
+/* Admin management area */
+.admin-category-btn .btn {
+  margin-bottom: 10px;
+}
+
+#login-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
+.navbar-search{
+  margin-right: 60px;
+}
+
+.doc-search{
+  margin-right: 100px;
+}
+
+.search-page{
+  text-align: center;
+}
+
+.search-next{
+  margin-left: 50px;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.login-btn-width {
+  width: 100px;
+}
+
+.login-btn{
+  text-align: left;
+}
+
+.login-form{
+  display: inline;
+}
+
+.info-back-btn{
+  margin-top:30px;
+}
+
+.full-screen{
+  min-height: 500px;
+}
+
+.center{
+
+}
+
+#admin-username-input{
+  width: 70%;
+}

@@ -1,0 +1,14 @@
+<div class="callout callout-info">
+  <p>用户名：<%= client.username %></p>
+
+  <p>邮箱：<a href="mailto:<%=client.email%>"><%= client.email %></a></p>
+
+  <p>QQ：<%= client.qq %>
+    <% if(client.qq){ %>
+    <a href="http://wpa.qq.com/msgrd?v=3&uin=<%= client.qq %>&site=qq&menu=yes"><img
+        class="qq-image"></a>
+    <% } %>
+  </p>
+
+  <a onclick="back();" class="btn btn-default btn-back">返回</a>
+</div>

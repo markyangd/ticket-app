@@ -1,0 +1,23 @@
+<div class="clearfix">
+  <div class="btn-group">
+    <a id="nav_tickets" href="/admin/tickets" class="btn btn-default" title="此区域的任何操作都可能引发星际战争，请慎重操作，切记切记！">工单管理</a>
+    <a id="nav_history" href="/admin/history?open=1&amp;type=ios" class="btn btn-default" title="历史工单库，为工单打标签，设置是否公开。">历史管理</a>
+    <a id="nav_statistics" href="/admin/statistics" class="btn btn-default" title="大家一块来瞧瞧，谁是本周回复最勤快的选手！">统计数据</a>
+  </div>
+
+  <% include browser_notification %>
+</div>
+<hr>
+
+<script>
+  $(function () {
+    var path = window.location.pathname;
+    var res=[/^\/admin\/tickets.*/,/^\/admin\/history.*/,/^\/admin\/statistics.*/];
+    var selector=['#nav_tickets','#nav_history','#nav_statistics'];
+    for(var i=0;i<res.length;i++){
+      if(res[i].test(path)){
+        $(selector[i]).addClass('active');
+      }
+    }
+  });
+</script>

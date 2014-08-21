@@ -1,0 +1,81 @@
+<% include admin_header.ejs %>
+
+<div>
+  <div>
+    <h4>客服统计</h4>
+    <table class="table table-borderless table-sortable">
+      <thead>
+      <tr>
+        <th data-sort="string">工程师</th>
+        <th data-sort="int" data-sort-default="desc">本周参与</th>
+        <th data-sort="int" data-sort-default="desc" data-sort-onload>本周回复</th>
+        <th data-sort="int" data-sort-default="desc">总参与</th>
+        <th data-sort="int" data-sort-default="desc">总回复</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% admins.forEach (function (admin){  %>
+      <tr>
+        <td class="table-num"><%= admin.username %></td>
+        <td class="table-num"><%= admin.weekTicketNum %></td>
+        <td class="table-num"><%= admin.weekReplyNum %></td>
+        <td class="table-num"><%= admin.allTicketNum %></td>
+        <td class="table-num"><%= admin.allReplyNum %></td>
+      </tr>
+      <%} ) %>
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <h4>本周统计</h4>
+    <table class="table table-borderless table-sortable">
+      <thead>
+        <tr>
+          <th>类型</th>
+          <th data-sort="string">负责工程师</th>
+          <th data-sort="int" data-sort-default="desc" data-sort-onload>处理工单数</th>
+          <th data-sort="int" data-sort-default="desc">回复次数</th>
+          <th data-sort="string">平均处理时长</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% week.forEach (function (data){  %>
+        <tr>
+          <td><%= data.type %></td>
+          <td><%= data.admin %></td>
+          <td><%= data.ticketnum %></td>
+          <td><%= data.replynum %></td>
+          <td data-sort-value="<%= data.averageTimeUnix %>"><%= data.averageTime %></td>
+        </tr>
+        <%} ) %>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h4>历史数据统计</h4>
+    <table class="table table-borderless table-sortable">
+      <thead>
+        <tr>
+          <th>类型</th>
+          <th data-sort="string">负责工程师</th>
+          <th data-sort="int" data-sort-default="desc" data-sort-onload>处理工单数</th>
+          <th data-sort="int" data-sort-default="desc">回复次数</th>
+          <th data-sort="string">平均处理时长</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% allhistory.forEach (function (data){  %>
+      <tr>
+        <td><%= data.type %></td>
+        <td><%= data.admin %></td>
+        <td><%= data.ticketnum %></td>
+        <td><%= data.replynum %></td>
+        <td data-sort-value="<%= data.averageTimeUnix %>"><%= data.averageTime %></td>
+      </tr>
+      <%} ) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+

@@ -1,0 +1,129 @@
+
+<script type="text/javascript">
+  $(function () {
+
+    function checkContentOk(content){
+      var secret=$("#inputOpen").is(":checked");
+      if(secret==false && existsAppIdOrKey(content)){
+        alert('检测到含有 AppId 或 AppKey，请勾选「仅管理员可见」');
+        return false;
+      }else{
+        return true;
+      }
+    }
+
+    $("#ticketForm").submit(function (event) {
+      var $form = $(this),
+        title = $form.find("input[id='inputTitle']").val(),
+        content = $form.find("textarea[id='inputContent']").val();
+      if (title == '' || content == '') {
+        alert("标题和问题描述都不能为空");
+        return false;
+      }
+      return checkContentOk(content);
+    });
+
+    $('#inputContent').keydown(function (e) {
+
+      if (e.ctrlKey && e.keyCode == 13) {
+        // Ctrl-Enter pressed
+        $("#ticketForm").submit();
+      }
+    });
+
+
+  });
+</script>
+<% if(client.id!='anonymousCid'){%>
+
+<div class="callout callout-info callout-has-icon" role="alert">
+  <i class="avc-icon avc-info"></i>
+  <h4>提交反馈小贴士</h4>
+  <ul>
+    <li>请描述清楚遇到的问题、现象及具体的应用，我们将及时回复</li>
+    <li>若在代码中涉及到保密信息时，请勾选择「<span class="alert-warning">仅管理员可见</span>」</li>
+    <li>回复通知将发送到您的注册邮箱，或者请刷新工单页面查看最新回复</li>
+    <li>如果我们的服务没有达到 <a target="_blank" href="http://open.avoscloud.com/tech-support-guide.html">技术支持标准</a>，您可以直接向我们的 CEO <a href="mailto:hjiang@avoscloud.com">投诉</a></li>
+  </ul>
+</div>
+
+<% }%>
+<form id="ticketForm" enctype="multipart/form-data" action="/tickets?token=<%=token%>" method="post">
+  <%if(client.id=='anonymousCid'){%>
+    <p class="callout callout-info">现为匿名用户，若您已在AVOS Cloud注册帐号，建议<a href="/login">登录</a>以便更好地联系您</p>
+  <%}%>
+  <div class="form-group">
+    <label class="control-label" for="inputTitle">
+      标题
+      <b class="has-required bstooltip" title="必填" data-placement="top">Required</b>
+    </label>
+    <div class="controls">
+      <input type="text" name="title" id="inputTitle" class="form-control" placeholder="标题" required>
+    </div>
+  </div>
+  <% if(client.id=='anonymousCid'){%>
+  <div class="form-group">
+    <label class="control-label" for="inputEmail">
+      电子邮箱
+      <b class="has-required bstooltip" title="必填" data-placement="top">Required</b>
+    </label>
+    <div class="controls">
+      <input type="email" name="email" id="inputEmail" class="form-control" placeholder="电子邮箱地址" required>
+    </div>
+  </div>
+  <% }%>
+  <div class="form-group">
+    <label class="control-label" for="inputType">
+      问题类型
+      <b class="has-required bstooltip" title="必填" data-placement="top">Required</b>
+    </label>
+    <div class="controls">
+    <select id="inputType" class="form-control" name="type" required>
+      <option value="ios" selected="selected">iOS SDK</option>
+      <option value="android">Android SDK</option>
+      <option value="javascript">JavaScript SDK</option>
+      <option value="push">消息推送</option>
+      <option value="cloud">云代码</option>
+      <option value="stats">统计</option>
+      <option value="dashboard">开发者平台</option>
+      <option value="other" >其他</option>
+    </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label" for="inputContent">
+      问题描述
+      <b class="has-required bstooltip" title="必填" data-placement="top">Required</b>
+    </label>
+    <div class="controls">
+      <textarea rows="10" cols="20" name="content" id="inputContent" class="form-control" placeholder="问题描述" required></textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label" for="inputAttachment">截图附件</label>
+    <div class="controls">
+      <input type='file' name='attachment' id='inputAttachment' accept="image/*"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="checkbox custom-control">
+      <label class="alert-warning ">
+        <input id="inputOpen" type="checkbox" name="secret">
+        <span class="control-indicator"></span>
+        仅管理员可见
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary">提交</button>
+    <a href="/tickets" class="btn btn-default">回到工单列表</a>
+  </div>
+
+  <%if((!client.qq || client.qq==0)&& client.id!='anonymousCid'){%>
+  <p class="callout callout-danger">
+    请前往<a target="_blank" href="/contact">联系信息</a>填写 QQ 号码，以便有需要的时候工程师更好地与您联系
+  </p>
+  <%}%>
+</form>
+

@@ -1,0 +1,63 @@
+<% include admin_header.ejs %>
+
+<div>
+  <div>
+  <ul class="nav nav-tabs">
+    <li id="home_link">
+    <a href="/admin/tickets">Home</a>
+    </li>
+    <li id="wait_link"><a href="/admin/tickets?status=0">等待处理</a></li>
+    <li id="process_link"><a href="/admin/tickets?status=1">等待用户</a></li>
+    <li id="complete_link"><a href="/admin/tickets?status=2">已完成</a></li>
+  </ul>
+  <table class="table table-borderless table-sortable">
+    <thead>
+      <tr>
+        <th data-sort="int">#</th>
+        <th data-sort="string">标题</th>
+        <th data-sort="string">状态</th>
+        <th data-sort="string">类型</th>
+        <th data-sort="int" data-sort-default="desc" data-sort-onload>创建时间</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% tickets.forEach (function (ticket){  %>
+    <tr>
+      <td class="table-id" data-sort-value="<%=ticket.ticket_id%>">#<%= ticket.ticket_id%></td>
+      <td class="table-title"><a href="/tickets/<%=ticket.id%>/threads?" title="#<%= ticket.ticket_id %>"><%= ticket.title %></a></td>
+      <td class="table-status"><%= ticket.status %></td>
+      <td class="table-type"><%= ticket.type %></td>
+      <td class="table-date" data-sort-value="<%= ticket.createdAtUnix %>"><span class="bstooltip" title="<%= ticket.createdAtLong %>"><%= ticket.createdAt %></span></td>
+    </tr>
+    <%} ) %>
+    </tbody>
+  </table>
+
+      <% if(back>=0) { %>
+      <% if(status != "") { %>
+      <a href="/admin/tickets?status=<%=status%>&skip=<%= back %>">上一页</a>
+      <% }else{ %>
+      <a href="/admin/tickets?skip=<%= back %>">上一页</a>
+      <% } %>
+      <% } %>
+      <% if(next>0) { %>
+      <% if(status != "") { %>
+      <a href="/admin/tickets?status=<%=status%>&skip=<%= next %>">下一页</a>
+      <% }else{ %>
+      <a href="/admin/tickets?skip=<%= next %>">下一页</a>
+      <% } %>
+      <% } %>
+  </div>
+</div>
+<script type="text/javascript">
+  var url = document.URL;
+  if (/.*status=2.*/.exec(url)){
+      $('#complete_link').attr('class','active');
+  }else if (/.*status=1.*/.exec(url)){
+      $('#process_link').attr('class','active');
+  }else if (/.*status=0.*/.exec(url)){
+      $('#wait_link').attr('class','active');
+  }else{
+       $('#home_link').attr('class','active');
+  }
+</script>

@@ -1,0 +1,122 @@
+<script type="text/javascript">
+    $(function (){
+        $("#searchForm").submit(function(event) {
+            var $form = $(this),
+                    content = $form.find( "textarea[id='inputSearch']" ).val();
+            if (content == ''){
+                alert ("搜索内容都不能为空。");
+                return false;
+            }
+            return true;
+        });
+
+    });
+</script>
+
+<% include admin_header.ejs %>
+
+<div>
+  <div class="clearfix" style="margin-top: -14px;">
+
+    <form id="searchForm" class="form-horizontal search-form pull-right" enctype="multipart/form-data" action="/admin/history" method="get">
+      <div class="input-group input-group-sm">
+        <input id="inputSearch" type="text" class="form-control" name="searchcontent" required>
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-default" id="openBtn">搜索</button>
+        </span>
+      </div>
+    </form>
+  </div>
+
+  <ul class="nav nav-tabs">
+    <li id="all_link">
+      <a href="/history">所有</a>
+    </li>
+    <li id="ios_link">
+      <a href="/admin/history?type=ios">iOS SDK</a>
+    </li>
+    <li id="android_link">
+      <a href="/admin/history?type=android">Android SDK</a>
+    </li>
+    <li id="javascript_link">
+      <a href="/admin/history?type=javascript">JavaScript SDK SDK</a>
+    </li>
+    <li id="push_link">
+      <a href="/admin/history?type=push">消息推送</a>
+    </li>
+    <li id="cloud_link">
+      <a href="/admin/history?type=cloud">云代码</a>
+    </li>
+    <li id="stats_link">
+      <a href="/admin/history?type=stats">统计</a>
+    </li>
+    <li id="dashboard_link">
+      <a href="/admin/history?type=dashboard">开发者平台</a>
+    </li>
+    <li id="other_link">
+      <a href="/admin/history?type=other">其他</a>
+    </li>
+  </ul>
+
+  <table class="table table-borderless table-sortable">
+    <thead>
+      <tr>
+        <th data-sort="string">标题</th>
+        <th data-sort="string">类型</th>
+        <th data-sort="int" data-sort-default="desc" data-sort-onload>创建时间</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% tickets.forEach (function (ticket){  %>
+    <tr>
+      <td class="table-title"><a href="/tickets/<%=ticket.id%>/threads" title="#<%= ticket.ticket_id %>"><%= ticket.title %></a></td>
+      <td class="table-type"><%= ticket.type %></td>
+      <td class="table-date bstooltip" data-sort-value="<%= ticket.createdAtUnix %>"><span class="bstooltip" title="<%= ticket.createdAtLong %>"><%= ticket.createdAt %></span></td>
+    </tr>
+    <%} ) %>
+    </tbody>
+  </table>
+  <ul class="pagination">
+    <% if(back>=0) { %>
+      <% if(type != null) { %>
+          <li><a href="/admin/history?type=<%= type%>&skip=<%= back %>">上一页</a></li>
+      <% }else{ %>
+          <li><a href="/admin/history?skip=<%= back %>">上一页</a></li>
+      <% } %>
+    <% } %>
+    <% if(next>0) { %>
+      <% if(type != null) { %>
+          <li><a href="/admin/history?type=<%= type%>&skip=<%= next %>">下一页</a></li>
+      <% }else{ %>
+          <li><a href="/admin/history?&skip=<%= next %>">下一页</a></li>
+      <% } %>
+    <% } %>
+  </ul>
+</div>
+
+<script>
+
+  var url = document.URL;
+  if (/.*type=ios.*/.exec(url)){
+    $('#ios_link').attr('class','active');
+  }else if (/.*type=android.*/.exec(url)){
+    $('#android_link').attr('class','active');
+  }else if (/.*type=javascript.*/.exec(url)){
+    $('#javascript_link').attr('class','active');
+  }else if (/.*type=push.*/.exec(url)){
+    $('#push_link').attr('class','active');
+  }else if (/.*type=cloud.*/.exec(url)){
+    $('#cloud_link').attr('class','active');
+  }else if (/.*type=stats.*/.exec(url)){
+    $('#stats_link').attr('class','active');
+  }else if (/.*type=cloud.*/.exec(url)){
+    $('#cloud_link').attr('class','active');
+  }else if (/.*type=dashboard.*/.exec(url)){
+    $('#dashboard_link').attr('class','active');
+  }else if (/.*type=other.*/.exec(url)){
+    $('#other_link').attr('class','active');
+  }else{
+    $('#all_link').attr('class','active');
+  }
+</script>
+

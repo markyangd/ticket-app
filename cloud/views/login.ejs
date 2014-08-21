@@ -1,0 +1,36 @@
+<script>
+  $(function () {
+    function empty(str) {
+      return str == null || str == '';
+    }
+
+
+    $('#loginForm').submit(function (event) {
+      var username = $('#usernameInput').val();
+      if (empty(username)) {
+        alert('用户名不能为空');
+        return false;
+      }
+      var password = $('#passwordInput').val();
+      if (empty(password)) {
+        alert('密码不能为空');
+        return false;
+      }
+      return true;
+    });
+  });
+</script>
+
+<div class="container  text-center ">
+
+  <form id="loginForm" class="search-form-middle" action="/login" method="POST">
+    <p>用户名：<input id="usernameInput" name="username" type="text"/></p>
+
+    <p>密码&nbsp;&nbsp;&nbsp;&nbsp;：<input id="passwordInput" name="password" type="password"/></p>
+
+    <div >
+      <input class="btn btn-default login-btn-width" name="go" type="submit" value="登录">
+      <a class="btn btn-default login-btn-width" href="/register">注册</a>
+    </div>
+  </form>
+</div>

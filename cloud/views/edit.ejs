@@ -1,0 +1,222 @@
+<script type="text/javascript">
+  var ctrlx=false;
+  var enterKey=13,xKey=88,sKey=83,escKey=27,semiKey=186,wKey=87;
+  var esc;
+  $(function () {
+
+    function checkContentOk(content) {
+      var secret = $("#inputOpen").is(":checked");
+      if (secret == false && existsAppIdOrKey(content)) {
+        alert('检测到含有 AppId 或 AppKey，请勾选「仅管理员可见」');
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    $("#threadForm").submit(function (event) {
+      var $form = $(this),
+        content = $form.find("textarea[id='inputContent']").val();
+      if (content == '' && $("#inputClose").val() != '1') {
+        alert("回复不能为空");
+        return false;
+      }
+      return checkContentOk(content);
+      //alert(content);
+      //return false;
+    });
+
+    $("#deleteForm").submit(function (event) {
+      return confirm('确认删除吗？');
+    });
+
+    function ctrlOrMeta(e){
+      return e.ctrlKey || e.metaKey;
+    }
+
+    $('#inputContent').keydown(function (e) {
+      if (ctrlOrMeta(e) && e.keyCode == enterKey) {
+        // Ctrl-Enter pressed
+        $("#threadForm").submit();
+        return false;
+      }else if(ctrlx && ctrlOrMeta(e) && e.keyCode==sKey){
+        $("#threadForm").submit();
+        return false;
+      }else if(ctrlOrMeta(e) && e.keyCode==xKey){
+        ctrlx=true;
+      }
+      /*if(e.keyCode==escKey){
+        console.log('esc key');
+        esc=true;
+      }
+      if(esc && e.keyCode==wKey){
+        console.log('semi key');
+        $("#threadForm").submit();
+        return false;
+      }*/
+    }).keyup(function(e){
+      if(e.keyCode!=xKey){
+        ctrlx=false;
+      }
+      /*if(e.keyCode!=escKey){
+        esc=false;
+      }
+      if(e.keyCode==wKey){
+        console.log('return false');
+        return false;
+      }*/
+    });
+
+    $("#closeBtn").click(function (event) {
+
+      function close() {
+        $("#inputClose").val("1");
+        $("#threadForm").submit();
+      }
+
+      <%if(!admin){%>
+      close();
+      <%}else{%>
+      if (confirm('确认关闭用户的工单吗？')) {
+        close();
+      }
+      <%}%>
+    });
+
+    <% if(admin) { %>
+    if (typeof(Storage) !== "undefined") {
+      $('#username').val(localStorage.getItem('admin_username') || '你是谁？');
+    }
+    <% } %>
+  });
+</script>
+
+<div>
+  <div class="clearfix">
+
+    <div class="pull-left" style="width: 75%">
+      <h2 style="display: inline"><%= ticket.title %>
+      </h2>
+    </div>
+
+    <div class="pull-right" style="">
+      
+      <% if(qqLink){
+      %>
+      <form action="<%= qqLink %>" class="custom-control pull-left">
+        <% var v; %>
+        <% if(admin){ %>
+        <% v = '联系用户' %>
+        <% }else{ %>
+        <% v = '联系工程师' %>
+        <% } %>
+        <input type="submit" class="btn btn-default btn-sm edit-contact pull-left" value="<%= v %>"/>
+      </form>
+      <% } %>
+
+      <% if(admin){ %>
+      <form id="deleteForm" action="/tickets/<%= ticket.id %>/delete"
+            method="post" class="custom-control pull-left">
+        <button type="submit" class="btn btn-danger btn-sm" id="deleteBtn">删除工单</button>
+      </form>
+      <% } %>
+    </div>
+  </div>
+
+  <div>
+    <p>
+      <span class="ticket-id">#<%= ticket.ticket_id %>-</span>
+      <span class="ticket-type"><%= ticket.type %>-</span>
+      <span class="ticket-date bstooltip" title="<%= ticket.createdAtLong %>">@ <%= ticket.createdAt %></span>
+      - <%= ticket.status %>
+      <% if(ticket.open != 1){ %>
+      <span class="icon-lock avc-icon avc-locked-on bstooltip" title="仅客服可见"></span>
+      <% } %>
+    </p>
+    <% if(ticket.visible){ %>
+    <pre><%= ticket.content %><%- ticket.attachment %></pre>
+    <% } %>
+  </div>
+</div>
+
+<hr>
+
+<% threads.forEach (function(thread){ %>
+
+<div class="ticket-thread-wrap">
+  <p class="ticket-thread-title">
+    <span class="ticket-user"><b><%= thread.user %></b></span>
+    <span class="ticket-date bstooltip" title="<%= thread.createdAtLong %>">@ <%= thread.createdAt %></span>
+    <% if(thread.open != 1){ %>
+      <span class="icon-lock avc-icon avc-locked-on bstooltip" title="仅客服可见"></span>
+    <% } %>
+  </p>
+
+  <% if(thread.visible){ %>
+  <div class="ticket-thread-content">
+    <pre><%= thread.content %><%- thread.attachment %></pre>
+  </div>
+  <% } %>
+</div>
+<% }); %>
+
+<div>
+  <div class="clearfix">
+    <% if(ticket.rawStatus < 2){ %>
+    <form id="threadForm" class="thread-form" enctype="multipart/form-data"
+          action="/tickets/<%= ticket.id %>/threads" method="post">
+      <div class="form-group">
+        <div class="checkbox custom-control">
+          <label class="alert-warning">
+            <input id="inputOpen" type="checkbox" name="secret"
+              <% if(lastOpen == 0){ %>
+                   checked
+              <% } %>
+              >
+            <span class="control-indicator"></span>
+            <% if(admin){ %>
+            仅该用户可见
+            <% }else{ %>
+            仅管理员可见
+            <% } %>
+
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="hidden" id="inputClose" name="close" value="0"/>
+        <label class="control-label" for="inputContent">
+          回复
+          <b class="has-required bstooltip" title="必填" data-placement="top">Required</b>
+        </label>
+        <textarea rows="5" name="content" id="inputContent" class="form-control" placeholder="回复内容" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="control-label" for="inputAttachment">截图附件</label>
+
+        <div class="controls">
+          <input type='file' name='attachment' id='inputAttachment' accept="image/*"/>
+        </div>
+      </div>
+      <div class="form-group pull-left">
+        <div class="controls">
+          <button type="submit" class="btn btn-primary btn-submit">提交</button>
+          <% if(cid != -99){ %>
+          <button type="button" class="btn btn-danger btn-close" id="closeBtn">关闭工单</button>
+          <% } %>
+        </div>
+      </div>
+    </form>
+    <% } %>
+  </div>
+
+
+  <p class="callout callout-info">
+    如果我们的服务没有达到 <a target="_blank" href="http://open.avoscloud.com/tech-support-guide.html">技术支持标准</a>，您可以进行 <a
+      href="mailto:hjiang@avoscloud.com">投诉</a>
+  </p>
+</div>
+
+
+<a onclick="back();" class="btn btn-default btn-back">返回</a>
+

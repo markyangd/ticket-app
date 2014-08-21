@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>AVOS Cloud 技术支持</title>
+  <% include head %>
+
+  <script>
+    // http://stackoverflow.com/questions/2271156/chrome-desktop-notification-example
+    <% if(locals.token) { %>
+    $(document).ready(function () {
+
+      function notify(msg) {
+        if (!Notify.isSupported()) return;
+        requestNotificationPermission();
+        msg.link = msg.link + '<%= token%>';
+        console.dir(msg.link);
+        var myNotification = new Notify('AVOS Cloud 技术支持更新!', {
+          icon: 'https://cn.avoscloud.com/favicon.ico',
+          body: msg.message || '您的工单有新的回复，点击查看。',
+          timeout: 4,
+          notifyClick: function () {
+            console.dir(msg.link);
+            window.open(msg.link);
+          }
+        });
+        myNotification.show();
+      }
+
+      function requestNotificationPermission() {
+        if (!Notify.isSupported())
+          alert('抱歉，您的浏览器不支持桌面通知，请使用 Chrome, Safari 等现代浏览器');
+        if (Notify.needsPermission()) {
+          $('#enableNotify').hide();
+          return Notify.requestPermission();
+        }
+      }
+
+      $('#enableNotifyBtn').click(requestNotificationPermission);
+
+      window.setInterval(function () {
+        //console.log('run');
+        if (!Notify.isSupported() || Notify.needsPermission()) return;
+        //console.log(Notify.needsPermission() + ' runrun');
+        var lastDate = $.jStorage.get('lastDate');
+        $.getJSON('/notifications?token=<%=token%>', {lastDate: lastDate}, function (data) {
+          if (data.results) {
+            if (data.results.length > 0) {
+              $.jStorage.set('lastDate', data.results[0].createdAt.getTime());
+            }
+            if ($.jStorage.get('lastDate') == null && data.results.length == 0) {
+              $.jStorage.set('lastDate', new Date().getTime());
+            }
+            $.each(data.results, function (index, msg) {
+              notify(msg);
+            });
+          }
+        });
+      }, 5000);
+
+      if (Notify.isSupported() && Notify.needsPermission()) {
+        $('#enableNotify').show();
+      }
+
+//end of jquery ready.
+    });
+
+    <% } %>
+
+
+    function existsAppIdOrKey(content) {
+      var re = /.*[0-9a-z]{48}.*/;
+      if (re.test(content)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    function back(){
+      if(document.referrer=='' ||document.referrer==window.location){
+        window.location='/tickets'
+      }else{
+        history.back()
+      }
+    }
+  </script>
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand font-logo" href="/tickets">AVOS Cloud <span class="navbar-brand-subtitle">用户反馈</span></a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li id="site_nav_tickets"><a href="/tickets">我的列表</a></li>
+        <li id="site_nav_history"><a href="/history">广场</a></li>
+        <li id="site_nav_engineers"><a href="/contact">联系方式</a></li>
+        <li id="site_nav_segmentfault">
+          <a href="http://segmentfault.com/avoscloud" target="blank">SegmentFault 问答</a>
+        </li>
+      </ul>
+
+      <ul class="nav navbar-nav pull-right">
+        <li id="site_nav_welcome">
+          <a href="/tickets" >欢迎您，<%=mClient.username%></a>
+        </li>
+        <li id="site_nav_logout">
+          <%if(isLogin){%>
+          <a id="login_href" href="/logout">注销</a>
+          <%}else{%>
+          <a id="login_href" href="/login">登录</a>
+          <%}%>
+
+        </li>
+      </ul>
+
+      <form id="topSearch" class="navbar-form navbar-right ng-pristine ng-valid " role="search"
+            action="/search"
+            method="get">
+        <div class="input-group navbar-search" >
+          <input id="inputSearch" type="text" class="form-control" value="" name="content"
+                 placeholder="搜索工单或文档">
+        <!--<span class="input-group-btn">
+          <button type="submit" class="btn btn-default" id="openBtn">搜索</button>
+        </span>-->
+        </div>
+      </form>
+    </div>
+    <!--/.nav-collapse -->
+  </div>
+</div>
+
+<div class="container">
+  <%- body %>
+</div>
+<!-- .container -->
+
+<% include footer %>
+
+<script>
+  $(function () {
+    // Bootstrap tooltips
+    $(".bstooltip").tooltip();
+
+    // Stupid Table init.
+    $(".table-sortable").stupidtable();
+
+    // Stupid Table loads on page ready
+    $(".table-sortable").find("th[data-sort-onload]").click();
+
+    // Stupiad Table adds arrow when sorting
+    var table = $(".table-sortable").stupidtable();
+    table.bind('aftertablesort', function (event, data) {
+      // data.column - the index of the column sorted after a click
+      // data.direction - the sorting direction (either asc or desc)
+
+      var th = $(this).find("th");
+      th.find(".arrow").remove();
+      var arrow = data.direction === "asc" ? "&uarr;" : "&darr;";
+      th.eq(data.column).append("<span class=arrow>" + arrow + "</span>");
+    });
+
+    var site_nav_url = window.location.pathname;
+    var regs = [/^(\/history|\/admin\/history).*/, /^(\/tickets|\/admin\/tickets).*/, /^\/search.*/, /^\/contact.*/];
+    var selectors = ["#site_nav_history", "#site_nav_tickets", "#site_nav_search", "#site_nav_engineers"];
+    for (var i = 0; i < regs.length; i++) {
+      if (regs[i].exec(site_nav_url)) {
+        $(selectors[i]).addClass('active');
+        break;
+      }
+    }
+
+    if(/^\/search.*/.test(site_nav_url)){
+      $('#topSearch').addClass('hidden');
+    }
+  });
+</script>
+
+</body>
+</html>

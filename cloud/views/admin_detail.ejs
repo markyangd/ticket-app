@@ -1,0 +1,44 @@
+<script>
+  $(function () {
+    $(".type").click(function (event) {
+      $("#typeValue").val(this.name);
+      $("#typeForm").submit();
+    })
+  });
+</script>
+
+<div>
+
+  <div class="callout callout-warning admin-detail-email">
+    <h5><strong><%= admin.username %></strong></h5>
+    <li><%= admin.email %></li>
+
+    <p>当负责模块的工单有更新时，将通知此邮箱</p>
+
+    <p>QQ：<%= admin.qq %></p>
+  </div>
+
+  <div class="callout callout-info admin-detail-module ">
+    <h4>负责模块</h4>
+    <ul>
+      <% admin.typeNames.forEach(function (typeName){ %>
+      <li>
+        <%= typeName %>
+      </li>
+      <% }) %>
+    </ul>
+
+    <form id="typeForm" action="/admin/detail/<%= admin.id %>" method="post">
+      <p>添加或删除模块</p>
+      <input class="hidden" id="typeValue" name="type"/>
+
+      <div>
+        <% for(var type in type2showMap){ %>
+        <input class="btn-default btn type" type="button" value="<%= type2showMap[type] %>" name="<%= type %>"/>
+        <% } %>
+      </div>
+    </form>
+  </div>
+
+
+</div>
