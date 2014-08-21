@@ -1,6 +1,6 @@
 # AVOS Cloud 的技术支持（工单）系统
 
-如果还未见识过工单系统，请移步于 [ticket.avosapps.com/](http://ticket.avosapps.com/)
+如果还未见识过工单系统，请移步于 [ticket.avosapps.com](http://ticket.avosapps.com/)
 
 这是 AVOS Cloud 的工单系统的开源版本。请见 [myticket.avosapps.com](http://myticket.avosapps.com)
 
