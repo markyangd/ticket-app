@@ -33,6 +33,9 @@
 ###一个简洁的时间线回复
 ![img](https://github.com/avoscloud/ticket-app/blob/master/readme/reply.png)
 
+### 与内部沟通工具相集成，方便及时回复
+![img](https://github.com/avoscloud/ticket-app/blob/master/readme/integration.png)
+
 ### 工程师联系信息列表
 ![img](https://github.com/avoscloud/ticket-app/blob/master/readme/contact.png)
 
