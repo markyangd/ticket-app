@@ -22,9 +22,11 @@ function renderEmailVerify(res, email) {
 function findClient(req, res, f) {
   var curUser = AV.User.current();
   if (curUser) {
-    var user = muser.transfromUser(curUser);
-    setResLoginStatus(res, true, user);
-    f.call(this, user.token, user.id, user);
+    curUser.fetch().then(function(curUser){
+      var user = muser.transfromUser(curUser);
+      setResLoginStatus(res, true, user);
+      f.call(this, user.token, user.id, user);
+    },res.renderErrorFn(res));
   } else {
     var anonymousClient = {
       id: anonymousCid,
