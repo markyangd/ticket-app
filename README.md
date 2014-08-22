@@ -22,6 +22,27 @@
 
 也可以从工单系统中借鉴其中的好想法。
 
+## 工单系统的特性
+
+###列举工单
+![img](https://github.com/avoscloud/ticket-app/blob/master/readme/list.png)
+
+###根据工程师负责模块的不同，显示相应类型的工单，分工明确
+![img](https://github.com/avoscloud/ticket-app/blob/master/readme/filter.png)
+
+###一个简洁的时间线回复
+![img](https://github.com/avoscloud/ticket-app/blob/master/readme/reply.png)
+
+### 工程师联系信息列表
+![img](https://github.com/avoscloud/ticket-app/blob/master/readme/contact.png)
+
+### 搜索工单
+![img](https://github.com/avoscloud/ticket-app/blob/master/readme/search.png)
+
+### 工程师回复统计
+![img](https://github.com/avoscloud/ticket-app/blob/master/readme/stat.png)
+
+
 ## 工单系统的好处
 
 * 当用户创建一个工单的时候，在公司内部沟通工具 Slack 上就会收到一条消息“新的工单！……[点击查看详情](https://ticket.avosapps.com/)。”，因为大家经常上 slack ，于是很快地回复用户。有砖头吗？
